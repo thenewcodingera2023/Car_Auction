@@ -1,5 +1,5 @@
 # Car_Auction 
-**Car Auction Application [If you are reading this Mr Mccourt, pls give me the CS Award #cuz I have proved myself to be the worthy one]**
+**Car Auction Application [If you are reading this Mr Mccourt, I have proved myself to be the worthy one]**
 
 Car Auction Application This application is a simple car auction system with features such as car display, car information, bidding, and checking the status of a car or a bid. It is built using the customtkinter library, which is a customizable version of the standard tkinter library in Python.
 
