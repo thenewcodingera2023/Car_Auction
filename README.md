@@ -25,7 +25,7 @@ I hope you find this application useful and enjoy using it!
 
 License This application is released under the MIT License. See the LICENSE file for more information.
 
-Author This application was created by Your Name.
+Author This application was created by Harry Tran.
 
 Acknowledgements CustomTkinter library
 
