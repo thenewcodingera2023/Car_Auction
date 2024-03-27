@@ -1,6 +1,6 @@
-# Car_Auction Car Auction Application [If you are reading this Mr Mccourt, pls give me the CS Award 
-#cuz I have proved myself to be the worthy one]
+# Car_Auction Car Auction Application [If you are reading this Mr Mccourt,  I have proved myself to be the worthy one]
 
+#Importing neccessary Libraries
 from customtkinter import *
 from PIL import Image
 import webbrowser
@@ -13,47 +13,54 @@ import platform
 #My library
 
 
-if platform.system() == "Windows":
+if platform.system() == "Windows": #Check User Platform
+    #Use Library
     notifier = DesktopNotifier()
+    #Function for sending desktop/user message
     def notify(title, text):
         notifier.send(title=title, message=text)
+    #Windows/Linux Version
 else:
+    #MacOS Version
+
+    #Blank
     CMD = '''
     on run argv
     display notification (item 2 of argv) with title (item 1 of argv)
     end run
     '''
+    #Initate Function for Mac OS Users
     def notify(title, text):
         subprocess.call(['osascript', '-e', CMD, title, text])
 
 
 #Variables Initation ---
-
-
-
-Car_Brand = ["Porsche", "Mercedes", "Triumph", "Peugeot", "Honda", "Mini", "Jaguar", "Aston", "BMW", "Ford"] 
-reserve_price = []
+Car_Brand = ["Porsche", "Mercedes", "Triumph", "Peugeot", "Honda", "Mini", "Jaguar", "Aston", "BMW", "Ford"] #Cars
+reserve_price = [] # Reserve Price - Random Generated For More Excitement!
+for i in range(1,11): #Range 
+    price = random.randint(1000,5000) # Generate numbers randomly ranging from 1000 - 5000
+    reserve_price.append(price) # Add generated number to list
+bid_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Bid Data incase User Bids
+Andrew = False #Competitor - Later
+sold = [False, False, False, False, False, False, False, False, False, False] #Sales Status Of Cars [On Stock or not On Stock?]
+bid_competition = [] #Default Bidding 
 for i in range(1,11):
-    price = random.randint(1000,5000)
-    reserve_price.append(price)
-bid_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-Andrew = False
-sold = [False, False, False, False, False, False, False, False, False, False]
-bid_competition = []
-for i in range(1,11):
-    bid_ai = random.randint(5001,9000)
-    bid_competition.append(bid_ai)
-Total_Purchase = []
-topay = 0
+    bid_ai = random.randint(5001,9000)# Generate numbers randomly ranging from 1000 - 5000
+    bid_competition.append(bid_ai) # Add generated number to list
+topay = 0 #Total Money To Be Paid
 
 
-# Side Functions
-def bomb(name):
+# Side Functions    
+def bomb(name): #THis Function Is For Destroying Windows.
     name.destroy()
     name.quit()
 
-def rick():
+def rick(): #Logging in With Google Function But I am Too Lazy
     return webbrowser.open('https://www.youtube.com/watch?v=xvFZjo5PgG0')
+
+def nuke():
+    Main_GUI.destroy()
+    Main_GUI.quit()
 
 
 
@@ -171,7 +178,7 @@ class car_info:
         self.exit_button = customtkinter.CTkButton(self.app, text='Exit', command=self.destroy_window)
         self.exit_button.pack(pady=(20,0))
 
-        
+
     def destroy_window(self):
         self.app.destroy()
         main_screen()
@@ -182,8 +189,8 @@ class car_info:
         self.app.quit()
         if data in globals():
             globals()[data]() 
-        
-        
+
+
 
 #View Bid UI
 
@@ -200,8 +207,8 @@ class PriceBoard:
         self.reserve()
 
         self.app.mainloop()
-    
-    
+
+
 
     def reserve(self):
         main_frame = customtkinter.CTkFrame(self.app, width=700, height=400)
@@ -211,13 +218,13 @@ class PriceBoard:
         left_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         left_frame.pack_propagate(0)
         left_frame.pack(side='left')
-        
+
         title_label = customtkinter.CTkLabel(left_frame, text="Reserve Price View", font=("Arial", 20, "bold"))
         title_label.pack(pady=20)
 
         inside_left_frame = customtkinter.CTkFrame(left_frame)
         inside_left_frame.pack(padx=20, pady=20)
-  
+
 
         product_name_label = customtkinter.CTkLabel(inside_left_frame, text="Product Name:")
         product_name_label.grid(row=0, column=0, padx=10, pady=5)
@@ -270,7 +277,7 @@ class PriceBoard:
 
 
 
-        
+
 
     def search(self):
         car_index_number = Car_Brand.index(self.product_name_combo_box.get())
@@ -305,7 +312,7 @@ class BiddingApp:
 
     def bid(self):
 
-         
+
 
 
         title_label = customtkinter.CTkLabel(self.app, text="Bidding Application", font=("Arial", 20, "bold"))
@@ -355,11 +362,11 @@ class BiddingApp:
 
         self.exit_button = customtkinter.CTkButton(self.app, text='Exit', command=self.destroy_window)
         self.exit_button.pack(pady=(20,0))
-    
+
     def destroy_window(self):
         self.app.destroy()
         main_screen()  
-    
+
     def collection(self):
         Andrew = random.choice([True, False])
         print(Andrew)
@@ -378,7 +385,7 @@ class BiddingApp:
                 self.result_show.insert(0, "Bid "+str(Car_Brand[car_index_number])+" Successful For $"+str(number_stat)+"!")
                 self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
                 notify('From Andrew', 'You are just lucky...')
-                
+
             else:
                 bid_competition[car_index_number] = int(number_stat)+random.randint(100,1500)
                 self.result_entry.delete(0, 'end')
@@ -395,8 +402,8 @@ class BiddingApp:
             self.result_bid.delete(0, 'end')
             self.result_entry.insert(0, "Failed. Please check!")
             self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
-        
- 
+
+
 #Check UI
 
 class Status_Check:
@@ -411,8 +418,8 @@ class Status_Check:
         self.status_cash()
 
         self.app.mainloop()
-    
-    
+
+
 
     def status_cash(self):
         main_frame = customtkinter.CTkFrame(self.app, width=700, height=400)
@@ -422,13 +429,13 @@ class Status_Check:
         left_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         left_frame.pack_propagate(0)
         left_frame.pack(side='left')
-        
+
         title_label = customtkinter.CTkLabel(left_frame, text="Sales Status View", font=("Arial", 20, "bold"))
         title_label.pack(pady=20)
 
         inside_left_frame = customtkinter.CTkFrame(left_frame)
         inside_left_frame.pack(padx=20, pady=20)
-  
+
 
         product_name_label = customtkinter.CTkLabel(inside_left_frame, text="Product Name:")
         product_name_label.grid(row=0, column=0, padx=10, pady=5)
@@ -482,7 +489,7 @@ class Status_Check:
 
 
 
-        
+
 
     def search(self):
         car_index_number = Car_Brand.index(self.product_name_combo_box.get())
@@ -493,7 +500,7 @@ class Status_Check:
             self.result_entry.delete(0, 'end')
             self.result_entry.insert(0,str(Car_Brand[car_index_number]+" Is Not On Stock!"))
 
-        
+
 
     def search2(self):
         car_index_number = Car_Brand.index(self.product_name_combo_box2.get())
@@ -510,7 +517,7 @@ class Status_Check:
 
 
 # Personal Crap
-        
+
 class Personal:
     def __init__(self):
         bomb(Main_GUI)
@@ -523,8 +530,8 @@ class Personal:
         self.cucu()
 
         self.app.mainloop()
-    
-    
+
+
 
     def cucu(self):
         main_frame = customtkinter.CTkFrame(self.app, width=700, height=400)
@@ -534,7 +541,7 @@ class Personal:
         left_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         left_frame.pack_propagate(0)
         left_frame.pack(side='left')
-        
+
         title_label = customtkinter.CTkLabel(left_frame, text="Personal Stats", font=("Arial", 20, "bold"))
         title_label.pack(pady=15)
 
@@ -557,10 +564,10 @@ class Personal:
             else:
                 pass
 
-        
+
         customtkinter.CTkLabel(left_frame, text="Outgoing Transactions: $"+str(topay)).pack(pady=5)
-                
-                
+
+
 
         right_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         right_frame.pack_propagate(0)
@@ -577,7 +584,7 @@ class Personal:
         product_name_label = customtkinter.CTkLabel(inside_right_frame, text="Product Name:")
         product_name_label.grid(row=0, column=0, padx=10, pady=5)
 
-       
+
 
 
         self.product_name_combo_box2 = customtkinter.CTkComboBox(inside_right_frame, values=Car_Brand)
@@ -607,7 +614,7 @@ class Personal:
         else:
             self.result_entry2.delete(0, 'end')
             self.result_entry2.insert(0,"Purchase Failed. Check Bid Or Sales Status")
-    
+
     def destroy_window(self):
         self.app.destroy()
         main_screen()
@@ -625,7 +632,7 @@ class bid_bot:
         self.bot_core()
 
         self.app.mainloop()
-    
+
     def bot_core(self):
         title_label = customtkinter.CTkLabel(self.app, text="Under Construction", font=("Arial", 20, "bold"))
         title_label.pack(pady=20)
@@ -686,7 +693,7 @@ def Mercedes():
 
 def Triumph():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -712,7 +719,7 @@ def Triumph():
 
 def Peugeot():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -738,7 +745,7 @@ def Peugeot():
 
 def Honda():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -764,7 +771,7 @@ def Honda():
 
 def Mini():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -790,7 +797,7 @@ def Mini():
 
 def Jaguar():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -816,7 +823,7 @@ def Jaguar():
 
 def Aston():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -842,7 +849,7 @@ def Aston():
 
 def BMW():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -868,7 +875,7 @@ def BMW():
 
 def Ford():
     global vip_screen
-    
+
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
@@ -935,6 +942,7 @@ def main_screen():
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Bid", command=BiddingApp).pack(pady=(0,30))
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Bid Bot", command=bid_bot).pack(pady=(0,30))
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Price Board", command=PriceBoard).pack(pady=(0,30))
+    customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Exit", command=nuke).pack(pady=(0,30))
     #---
     Main_GUI.mainloop()
 
@@ -977,7 +985,7 @@ customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color
 
 
 customtkinter.CTkLabel(master=frame, text="4 Digit ID [Leave Blank If New]: ", text_color="#601E88", anchor="w", justify="left", font=("Arial Bold", 14), image=password_icon, compound="left").pack(anchor="w", pady=(21, 0), padx=(25, 0))
-customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", show="*", textvariable=temp_id).pack(anchor="w", padx=(25, 0))
+customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", textvariable=temp_id).pack(anchor="w", padx=(25, 0))
 
 customtkinter.CTkButton(master=frame, text="Login", fg_color="#601E88", hover_color="#E44982", font=("Arial Bold", 12), text_color="#ffffff", width=225, command=main_screen).pack(anchor="w", pady=(40, 0), padx=(25, 0))
 
