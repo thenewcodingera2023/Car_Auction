@@ -1,4 +1,4 @@
-# Car_Auction Car Auction Application
+# Car_Auction Car Auction Application [If you are reading this Mr Mccourt,  I have proved myself to be the worthy one]
 
 #Importing neccessary Libraries
 from customtkinter import *
@@ -138,8 +138,9 @@ def car_display():
 
 #Car Stats UI
 
-class car_info:
-    def __init__(self):
+class car_info: #Class For better organization
+    def __init__(self): #Initate Self --->
+        #Check If Any Windows Are Not Destroyed. If No -> Proceed to destroy them all
         if 'Main_GUI' in globals():
             try:
                 Main_GUI.destroy()
@@ -150,24 +151,28 @@ class car_info:
                 vip_screen.destroy()
             except Exception:
                 pass
-        self.app = customtkinter.CTk()
-        self.app.title("")
-        self.app.geometry("350x300")
-        self.app.minsize(350, 300)
-        self.app.maxsize(350, 300)
+        #Establish New Window
+        self.app = customtkinter.CTk() #Call Library
+        self.app.title("Car Info Viewer") #Screen Title
+        self.app.geometry("350x300") #Geometry
+        self.app.minsize(350, 300) #Prevent user from changing size of screen
+        self.app.maxsize(350, 300) #Prevent user from changing size of screen
 
+        #Call Main Function [I seperate this out for better organization]
         self.car_stats()
 
+        #Keep Screen Active and Functionable
         self.app.mainloop()
 
-    def car_stats(self):
+    def car_stats(self): #main Function for screen 
         title_label = customtkinter.CTkLabel(self.app, text="Model Exploration", font=("Arial", 20, "bold"))
-        title_label.pack(pady=20)
+        title_label.pack(pady=20) #Establish Title
 
 
         form_frame = customtkinter.CTkFrame(self.app)
-        form_frame.pack(padx=20, pady=20)
-
+        form_frame.pack(padx=20, pady=20) #Mother Frame Of Window
+        #The Frame act as a board to keep everything together and prevent elements/buttons/texboxes from overlapping each other
+        #Very Important!!!
 
         product_name_label = customtkinter.CTkLabel(form_frame, text="Product Name:")
         product_name_label.grid(row=0, column=0, padx=10, pady=5)
@@ -176,24 +181,24 @@ class car_info:
         self.product_name_combo_box = customtkinter.CTkComboBox(form_frame, values=Car_Brand)
         self.product_name_combo_box.grid(row=0, column=1, padx=10, pady=5)
 
-        # create a button to submit the bidding
+        # create a button to submit
         submit_button = customtkinter.CTkButton(self.app, text="View Car", command=self.view)
-        submit_button.pack(pady=10)
+        submit_button.pack(pady=10) #Button for submit
 
         self.exit_button = customtkinter.CTkButton(self.app, text='Exit', command=self.destroy_window)
-        self.exit_button.pack(pady=(20,0))
+        self.exit_button.pack(pady=(20,0)) #Exit Button
 
 
-    def destroy_window(self):
+    def destroy_window(self): #Exit Button Function
         self.app.destroy()
         main_screen()
 
     def view(self):
-        data = self.product_name_combo_box.get()
-        self.app.destroy()
+        data = self.product_name_combo_box.get() #Extract Data From User Selection [Str Format]
+        self.app.destroy() #Destroy Screen
         self.app.quit()
-        if data in globals():
-            globals()[data]() 
+        if data in globals(): #Check If Variable exist as a global function
+            globals()[data]() #If Yes Then Call Function as Variable [Works 100% Of the Time So No else Functions]
 
 
 
@@ -369,8 +374,8 @@ class BiddingApp:
         self.exit_button.pack(pady=(20,0))
 
     def destroy_window(self):
-        self.app.destroy()
-        main_screen()  
+        self.app.destroy() #Destroy Current Screen
+        main_screen()  #Return Back to main Screen
     def collection(self):
         #Main Bidding Function 
         Andrew = random.choice([True, False]) #Randomize Chance Of Out-Bidding user
@@ -379,37 +384,37 @@ class BiddingApp:
         if number_stat.isdigit() == True:  #Check If Entry Only contain number digits
             if int(number_stat) > int(bid_competition[car_index_number]) :  # Check if it is larger than previous bid
                 if Andrew == False: #If Andrew Did not outbid user
-                    bid_competition[car_index_number] = number_stat
-                    bid_data[car_index_number] = number_stat
-                    self.result_entry.delete(0, 'end')
-                    self.result_show.delete(0, 'end')
-                    self.result_bid.delete(0, 'end')
-                    self.result_entry.insert(0, "Success!") #Show
+                    bid_competition[car_index_number] = number_stat #Change the overall bid
+                    bid_data[car_index_number] = number_stat #Change User Bid Data
+                    self.result_entry.delete(0, 'end')#Clear Textboxes incase of bugs
+                    self.result_show.delete(0, 'end')#Clear Textboxes incase of bugs
+                    self.result_bid.delete(0, 'end')#Clear Textboxes incase of bugs
+                    self.result_entry.insert(0, "Success!") #Show Status 
                     self.result_show.insert(0, "Bid "+str(Car_Brand[car_index_number])+" Successful For $"+str(number_stat)+"!")
                     self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
                     notify('From Andrew', 'You are just lucky...') #Send A Message to user
                 else: #Else
                     bid_competition[car_index_number] = int(number_stat)+random.randint(100,1500) 
                     #If Andrew Outbids than put his bid into higest bid
-                    self.result_entry.delete(0, 'end')
-                    self.result_show.delete(0, 'end')
-                    self.result_bid.delete(0, 'end')
+                    self.result_entry.delete(0, 'end') #Clear Textboxes incase of bugs
+                    self.result_show.delete(0, 'end')#Clear Textboxes incase of bugs
+                    self.result_bid.delete(0, 'end')#Clear Textboxes incase of bugs
                     self.result_entry.insert(0, "ERROR 404!!!")
                     self.result_show.insert(0, "Andrew Has A Surprise For You!")
                     self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
-                    notify('From Andrew', 'I HAVE OUTBIDDED YOU. TRY AGAIN NEXT TIME HAHAH!')
+                    notify('From Andrew', 'I HAVE OUTBIDDED YOU. TRY AGAIN NEXT TIME HAHAH!') #Sends a message to troll users
             else:
-                self.result_entry.delete(0, 'end')
+                self.result_entry.delete(0, 'end')#Clear Textboxes incase of bugs
                 self.result_show.delete(0, 'end')
                 self.result_bid.delete(0, 'end')
-                self.result_entry.insert(0, "Failed. Please check!")
-                self.result_bid.insert(0, "$"+str(bid_competition[car_index_number])) #Error Message
+                self.result_entry.insert(0, "Failed. Please check!") #Show Status
+                self.result_bid.insert(0, "$"+str(bid_competition[car_index_number])) #Show Current Bid Of Vehicle
         else:
-            self.result_entry.delete(0, 'end')
+            self.result_entry.delete(0, 'end')#Clear Textboxes incase of bugs
             self.result_show.delete(0, 'end')
             self.result_bid.delete(0, 'end')
-            self.result_entry.insert(0, "Failed. Please check!")
-            self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))#Error Message
+            self.result_entry.insert(0, "Failed. Please check!")#Show Status
+            self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))#Show Current Bid Of Vehicle
 
 
 #Check UI
@@ -665,31 +670,38 @@ class bid_bot:
 
 #Cars
 
-def Porsche():
+def Porsche(): #Screeen
     global vip_screen
     vip_screen = CTk()
     vip_screen.geometry('800x600')
     vip_screen.resizable(0,0)
     vip_screen.title("Porsche")
     #---
+
+    #Upload Image Onto Code Database
     porsche_data = Image.open("porsche-model.png")
 
 
+    #Process Image For Later Use
     porsche = CTkImage(dark_image=porsche_data, light_image=porsche_data, size=(648,364))
     #---
 
+    #Create a specific Frame for the picture so that it does not overlap with other text elements
     Picture_Frame = customtkinter.CTkFrame(master=vip_screen, width=800, height=300, fg_color="#ffffff")
-    Picture_Frame.pack_propagate(0)
-    Picture_Frame.pack(side="top")
+    Picture_Frame.pack_propagate(0) #Don't allow child elements to make changes to frame size
+    Picture_Frame.pack(side="top") #Frame is on top
     customtkinter.CTkLabel(master=Picture_Frame, text="", text_color="#601E88", font=("Arial Bold", 20),image=porsche, compound='center').pack()
+    #Image
     #---
+    #Text -> Packing is for compacting the code. 
+    
     customtkinter.CTkLabel(master=vip_screen, text="Porsche 911 GT3RS", text_color="#601E88", font=("Arial Bold", 24)).pack(pady=(5,10))
     customtkinter.CTkLabel(master=vip_screen, text="Horsepower: Approximately 520 horsepower", text_color="#601E88", font=("Arial Bold", 18)).pack(pady=(0,8))
     customtkinter.CTkLabel(master=vip_screen, text="Engine Type: Naturally aspirated flat-six", text_color="#601E88", font=("Arial Bold", 18)).pack(pady=(0,8))
     customtkinter.CTkLabel(master=vip_screen, text="Top Speed: Approximately 200 mph (322 km/h)", text_color="#601E88", font=("Arial Bold", 18)).pack(pady=(0,8))
-    customtkinter.CTkLabel(master=vip_screen, text="Reserve Price: $"+str(reserve_price[0]), text_color="#601E88", font=("Arial Bold", 18)).pack(pady=(0,8))
+    customtkinter.CTkLabel(master=vip_screen, text="Reserve Price: $"+str(reserve_price[0]), text_color="#601E88", font=("Arial Bold", 18)).pack(pady=(0,8)) #Convert all variables to str in text since [Str] is the only accepted format. 
     customtkinter.CTkButton(master=vip_screen, text="Exit", fg_color=("#DB3E39", "#821D1A"), command=car_info).pack(pady=(20,20))
-
+    #Exit Button 
     vip_screen.mainloop()
 
 def Mercedes():
