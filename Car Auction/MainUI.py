@@ -1,6 +1,6 @@
-# Car_Auction Car Auction Application [If you are reading this Mr Mccourt,  I have proved myself to be the worthy one]
+# Car_Auction Car Auction Application
 
-#Importing neccessary Libraries
+#Importing necessary Libraries
 from customtkinter import *
 from PIL import Image
 import webbrowser
