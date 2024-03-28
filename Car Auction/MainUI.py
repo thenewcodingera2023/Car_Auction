@@ -1,4 +1,4 @@
-# Car_Auction Car Auction Application [If you are reading this Mr Mccourt,  I have proved myself to be the worthy one]
+# Car_Auction Car Auction Application
 
 #Importing neccessary Libraries
 from customtkinter import *
@@ -68,13 +68,14 @@ def nuke():
 
 def car_display():
     global car_screen
-    bomb(Main_GUI)
-    car_screen = CTk()
+    bomb(Main_GUI) #Destroy Previous Window
+    car_screen = CTk() #Initiate Screen
     car_screen.geometry('1000x900')
     car_screen.resizable(0,0)
     car_screen.title("Da Den")
     #--- Images
 
+    #Proccess Image
     porsche_data = Image.open("porsche-model.png")
     mercedes_data = Image.open("mercedes.png")
     triumph_data = Image.open("triumph.png")
@@ -86,7 +87,7 @@ def car_display():
     bmw_data = Image.open('bmw.png')
     ford_data = Image.open('ford.png')
 
-
+    #Publish Image and Image settigns for use
     porsche = CTkImage(dark_image=porsche_data, light_image=porsche_data, size=(288,162))
     mercedes = CTkImage(dark_image=mercedes_data, light_image=mercedes_data, size=(254,143))
     triumph = CTkImage(dark_image=triumph_data, light_image=triumph_data, size=(259, 194))
@@ -99,13 +100,16 @@ def car_display():
     ford = CTkImage(dark_image=ford_data, light_image=ford_data, size=(288, 162))
 
     #---
+    #Main Frame 
     Outer_Car_Frame = CTkFrame(master=car_screen, width=1000, height=880, fg_color="#ffffff")
     Outer_Car_Frame.pack_propagate(0)
     Outer_Car_Frame.pack(side="top")
 
+    #Left Side Frame
     car_frame = CTkFrame(master=Outer_Car_Frame, width=500, height=880, fg_color="#ffffff")
     car_frame.pack_propagate(0)
     car_frame.pack(side="left")
+    #Image Positioning
     CTkLabel(master=car_frame, text="Porsche ", text_color="#601E88", anchor="e", justify="left", font=("Arial Bold", 20),image=porsche, compound='right').pack(anchor="w", pady=(0, 5), padx=(25,0))
     CTkLabel(master=car_frame, text="Mercedes ", text_color="#601E88", anchor="e", justify="left", font=("Arial Bold", 20), image=mercedes, compound='right').pack(anchor="w", pady=(20, 5), padx=(25,0))
     CTkLabel(master=car_frame, text="Triumph ", text_color="#601E88", anchor="e", justify="left", font=("Arial Bold", 20), image=triumph, compound='right').pack(anchor="w", pady=(20, 5), padx=(25,0))
@@ -115,7 +119,7 @@ def car_display():
 
     #---
 
-
+    #Main Frame
     Second = CTkFrame(master=Outer_Car_Frame, width=500, height=880, fg_color="#ffffff")
     Second.pack_propagate(0)
     Second.pack(side="right")
@@ -126,6 +130,7 @@ def car_display():
     CTkLabel(master=Second, text="BMW", text_color="#601E88", anchor="e", justify="left", font=("Arial Bold", 20), image=bmw, compound='right').pack(anchor="w", pady=(20, 5), padx=(0, 25))
     #---
 
+    #Exit Button
     CTkButton(master=car_screen, text="Exit", fg_color=("#DB3E39", "#821D1A"), compound='bottom', command=main_screen).pack()
 
     #---
@@ -366,42 +371,45 @@ class BiddingApp:
     def destroy_window(self):
         self.app.destroy()
         main_screen()  
-
     def collection(self):
-        Andrew = random.choice([True, False])
-        print(Andrew)
-        number_stat = self.bidding_price_entry.get()
-        car_index_number = Car_Brand.index(self.product_name_combo_box.get())
-        print(car_index_number)
-        print(number_stat)
-        if int(number_stat) > int(bid_competition[car_index_number]): 
-            if Andrew == False:
-                bid_competition[car_index_number] = number_stat
-                bid_data[car_index_number] = number_stat
-                self.result_entry.delete(0, 'end')
-                self.result_show.delete(0, 'end')
-                self.result_bid.delete(0, 'end')
-                self.result_entry.insert(0, "Success!")
-                self.result_show.insert(0, "Bid "+str(Car_Brand[car_index_number])+" Successful For $"+str(number_stat)+"!")
-                self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
-                notify('From Andrew', 'You are just lucky...')
-
+        #Main Bidding Function 
+        Andrew = random.choice([True, False]) #Randomize Chance Of Out-Bidding user
+        number_stat = self.bidding_price_entry.get() #Get Bid Price Data
+        car_index_number = Car_Brand.index(self.product_name_combo_box.get()) #Get Car Index
+        if number_stat.isdigit() == True:  #Check If Entry Only contain number digits
+            if int(number_stat) > int(bid_competition[car_index_number]) :  # Check if it is larger than previous bid
+                if Andrew == False: #If Andrew Did not outbid user
+                    bid_competition[car_index_number] = number_stat
+                    bid_data[car_index_number] = number_stat
+                    self.result_entry.delete(0, 'end')
+                    self.result_show.delete(0, 'end')
+                    self.result_bid.delete(0, 'end')
+                    self.result_entry.insert(0, "Success!") #Show
+                    self.result_show.insert(0, "Bid "+str(Car_Brand[car_index_number])+" Successful For $"+str(number_stat)+"!")
+                    self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
+                    notify('From Andrew', 'You are just lucky...') #Send A Message to user
+                else: #Else
+                    bid_competition[car_index_number] = int(number_stat)+random.randint(100,1500) 
+                    #If Andrew Outbids than put his bid into higest bid
+                    self.result_entry.delete(0, 'end')
+                    self.result_show.delete(0, 'end')
+                    self.result_bid.delete(0, 'end')
+                    self.result_entry.insert(0, "ERROR 404!!!")
+                    self.result_show.insert(0, "Andrew Has A Surprise For You!")
+                    self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
+                    notify('From Andrew', 'I HAVE OUTBIDDED YOU. TRY AGAIN NEXT TIME HAHAH!')
             else:
-                bid_competition[car_index_number] = int(number_stat)+random.randint(100,1500)
                 self.result_entry.delete(0, 'end')
                 self.result_show.delete(0, 'end')
                 self.result_bid.delete(0, 'end')
-                self.result_entry.insert(0, "ERROR 404!!!")
-                self.result_show.insert(0, "Andrew Has A Surprise For You!")
-                self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
-                notify('From Andrew', 'I HAVE OUTBIDDED YOU. TRY AGAIN NEXT TIME HAHAH!')
-
+                self.result_entry.insert(0, "Failed. Please check!")
+                self.result_bid.insert(0, "$"+str(bid_competition[car_index_number])) #Error Message
         else:
             self.result_entry.delete(0, 'end')
             self.result_show.delete(0, 'end')
             self.result_bid.delete(0, 'end')
             self.result_entry.insert(0, "Failed. Please check!")
-            self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))
+            self.result_bid.insert(0, "$"+str(bid_competition[car_index_number]))#Error Message
 
 
 #Check UI
@@ -518,8 +526,8 @@ class Status_Check:
 
 # Personal Crap
 
-class Personal:
-    def __init__(self):
+class Personal: #Buy and View Screen 
+    def __init__(self): #Initiate Screen elements, geometry, state etc. 
         bomb(Main_GUI)
         self.app = customtkinter.CTk()
         self.app.title("Bidding Application")
@@ -527,97 +535,113 @@ class Personal:
         self.app.minsize(700, 500)
         self.app.maxsize(700, 500)
 
-        self.cucu()
+        #Function 
+        self.personal2()
 
+        #Keep Window Running Until Quit
         self.app.mainloop()
 
 
-
-    def cucu(self):
+    def personal2(self):
+        #Biggest Frame -> Mother Frame
         main_frame = customtkinter.CTkFrame(self.app, width=700, height=400)
         main_frame.pack_propagate(0)
         main_frame.pack(side='top')
 
+        #1st Child Frame On the left
         left_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         left_frame.pack_propagate(0)
         left_frame.pack(side='left')
 
+        #Title 
         title_label = customtkinter.CTkLabel(left_frame, text="Personal Stats", font=("Arial", 20, "bold"))
         title_label.pack(pady=15)
 
+        #Text
         customtkinter.CTkLabel(left_frame, text="Cars Bidded: ").pack(pady=8)
 
-        for i in range(len(bid_data)):
+        for i in range(len(bid_data)): #Check and Return the Cars that are Bidded and NOT SOLD
             if int(bid_data[i]) > 0:
-                if sold[i] == False:
+                if sold[i] == False: #If sold = False 
                     customtkinter.CTkLabel(left_frame, text=Car_Brand[i]).pack()
                 else:
                     pass
             else:
                 pass
 
+        #Text To Show Cars Purchased
         customtkinter.CTkLabel(left_frame, text="Cars Purchased: ").pack(pady=8)
 
-        for i in range(len(sold)):
+        for i in range(len(sold)): #Check and Return the Cars that are Out Of Stock
             if int(sold[i]) == True:
                 customtkinter.CTkLabel(left_frame, text=Car_Brand[i]).pack()
             else:
                 pass
 
+        #Total Money To be paid
+        customtkinter.CTkLabel(left_frame, text="Outgoing Transactions: $"+str(topay)).pack(pady=5) 
+        #Convert to String to fit Format
 
-        customtkinter.CTkLabel(left_frame, text="Outgoing Transactions: $"+str(topay)).pack(pady=5)
 
 
-
+        #Initiate Right Frame -> Child Frame of Frame 
         right_frame = customtkinter.CTkFrame(main_frame, width=350, height=400)
         right_frame.pack_propagate(0)
         right_frame.pack(side='right')
 
 
+        #Purchase Section
         title_label = customtkinter.CTkLabel(right_frame, text="Purchase", font=("Arial", 20, "bold"))
         title_label.pack(pady=20)
 
-
+        #Child Of Parent Of Parent. 
         inside_right_frame = customtkinter.CTkFrame(right_frame)
         inside_right_frame.pack(padx=20, pady=20)
 
+        #Text
         product_name_label = customtkinter.CTkLabel(inside_right_frame, text="Product Name:")
         product_name_label.grid(row=0, column=0, padx=10, pady=5)
 
-
-
-
+        #A Combobox for easier Selection [You Don't have to type]
         self.product_name_combo_box2 = customtkinter.CTkComboBox(inside_right_frame, values=Car_Brand)
-        self.product_name_combo_box2.grid(row=0, column=1, padx=10, pady=5)
+        self.product_name_combo_box2.grid(row=0, column=1, padx=10, pady=5) 
+        #Columns and rows are for organization and indentation. Do THE MATHS
 
-
+        #Purchase Button
         submit_button = customtkinter.CTkButton(right_frame, text="Purchase", command=self.buy)
         submit_button.pack(pady=10)
 
+        #Text
         result_label = customtkinter.CTkLabel(right_frame, text="Status:")
         result_label.pack(pady=10)
 
+        #Status Show Space
         self.result_entry2 = customtkinter.CTkEntry(right_frame, width=300, justify='center')
         self.result_entry2.pack(pady=5)
 
+        #Exit Window
         self.exit_button = customtkinter.CTkButton(self.app, text='Exit', command=self.destroy_window)
         self.exit_button.pack(pady=(20,0))
 
     def buy(self):
-        global topay
-        car_index_number = Car_Brand.index(self.product_name_combo_box2.get())
-        if int(bid_data[car_index_number]) != 0 and sold[car_index_number] == False:
+        global topay #Globalize variable 
+        car_index_number = Car_Brand.index(self.product_name_combo_box2.get()) #Get Index Number For Processing 
+        if int(bid_data[car_index_number]) != 0 and sold[car_index_number] == False: #check if car is bidded and is on stock
             topay+=int(bid_data[car_index_number])
             sold[car_index_number] = True
             self.result_entry2.delete(0, 'end')
+            #Reset Box Incase Of Bug
             self.result_entry2.insert(0,"Purchase "+str(Car_Brand[car_index_number])+" Successful for $"+str(bid_data[car_index_number]))
+            #Show Status Of Car
         else:
             self.result_entry2.delete(0, 'end')
+            #Reset Box Incase Of Bug
             self.result_entry2.insert(0,"Purchase Failed. Check Bid Or Sales Status")
+            #Return Error
 
-    def destroy_window(self):
-        self.app.destroy()
-        main_screen()
+    def destroy_window(self): #Function 
+        self.app.destroy() #Destroy Current Window
+        main_screen() #Return To main Screen
 
 #Bid Bot [For later]
 
@@ -905,34 +929,31 @@ def Ford():
 
 
 def main_screen():
-
-    global Main_GUI
-    #--- Bug Fix
-    username = temp_user.get()
-    if username == "":
+    global Main_GUI #Global variable for later use
+    #--- User gatherer
+    username = temp_user.get() #Retreive Data
+    if username == "": #Incase User Doesn't Give Username
         username = "ANONYMUS"
-    userid = temp_id.get()
-    if len(userid) == 4:
+    userid = temp_id.get()#Retreive Data
+    if len(userid) == 4: #For new People
         pass
     else:
-        userid = random.randint(1000,9999)
-    if 'app' in globals():
+        userid = random.randint(1000,9999) #Randomly generated ID
+    #--- Bug Fix
+    if 'app' in globals(): #check if in global
         try:
-            app.destroy()
-        except Exception:
+            app.destroy() #If Window Exist then Kill Window since I don't want them to run in the background. These cause lots of lag
+        except Exception: #If Return error then we ignore it. 
             pass
-    if 'car_screen' in globals():
+    if 'car_screen' in globals(): #The Same as Above
         try:
             car_screen.destroy()
         except Exception:
             pass
-    #--- User gatherer
-    #---
-    Main_GUI = CTk()
-    Main_GUI.geometry('600x800')
-    Main_GUI.resizable(0,0)
-    Main_GUI.title("Car_Auction.EXE")
-    #----p
+    Main_GUI = CTk() #Establish Screen
+    Main_GUI.geometry('600x800') #Geometry
+    Main_GUI.resizable(0,0) #disable edit
+    Main_GUI.title("Main Screen") #Title
     customtkinter.CTkLabel(master=Main_GUI, text="Welcome "+str(username)+" To The Aspida Annual Car Auction", font=("Comic Sans MS", 18),  text_color="#601E88", pady=30).pack()
     customtkinter.CTkLabel(master=Main_GUI, text="User ID: "+str(userid), font=("Comic Sans MS", 24),  text_color="#601E88", pady=30).pack()
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Personal Dashboard", command=Personal).pack(pady=(0,30))
@@ -943,56 +964,67 @@ def main_screen():
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Bid Bot", command=bid_bot).pack(pady=(0,30))
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Price Board", command=PriceBoard).pack(pady=(0,30))
     customtkinter.CTkButton(master=Main_GUI, fg_color=("#DB3E39", "#821D1A"), text="Exit", command=nuke).pack(pady=(0,30))
-    #---
+    #Buttons and Functions 
     Main_GUI.mainloop()
+    #Keep Window Running and All Functions Functioning -> Backbone!!!
 
 
 #Login Screen-----------------------
-
+#Globalize variable for later use
 global app
+app = CTk() #Initiate Window
+app.geometry("600x480") #Establish Window Size
+app.resizable(0,0) #Disable zoom 
+app.title("Aspida Login") #Title
 
-
-app = CTk()
-app.geometry("600x480")
-app.resizable(0,0)
-app.title("Andrew's Homework Folder")
-
+#Image Processing
 side_img_data = Image.open("Dragos_Logo.webp")
 email_icon_data = Image.open("email-icon.png")
 password_icon_data = Image.open("password-icon.png")
 google_icon_data = Image.open("google-icon.png")
 
+#Image Processing
 side_img = CTkImage(dark_image=side_img_data, light_image=side_img_data, size=(300, 480))
 email_icon = CTkImage(dark_image=email_icon_data, light_image=email_icon_data, size=(20,20))
 password_icon = CTkImage(dark_image=password_icon_data, light_image=password_icon_data, size=(17,17))
 google_icon = CTkImage(dark_image=google_icon_data, light_image=google_icon_data, size=(17,17))
 
+#Temporary Variables for transition
 temp_user = customtkinter.StringVar(master=app, value='')
 temp_id = customtkinter.StringVar(master=app, value='')
 
+#Image On the Left
 CTkLabel(master=app, text="", image=side_img).pack(expand=True, side="left")
 
+
+#A Frame inside a big window. 
 frame = customtkinter.CTkFrame(master=app, width=300, height=480, fg_color="#ffffff")
 frame.pack_propagate(0)
 frame.pack(expand=True, side="right")
 
-customtkinter.CTkLabel(master=frame, text="Welcome Back!", text_color="#601E88", anchor="w", justify="left", font=("Arial Bold", 24)).pack(anchor="w", pady=(50, 5), padx=(25, 0))
-customtkinter.CTkLabel(master=frame, text="Sign in to your account", text_color="#7E7E7E", anchor="w", justify="left", font=("Arial Bold", 12)).pack(anchor="w", padx=(25, 0))
+#Welcoming Text
+customtkinter.CTkLabel(master=frame, text="Welcome Back!", text_color="#601E88", anchor="w", justify="left", font=("Arial Bold", 24)).pack(anchor="w", pady=(50, 5), padx=(25, 0)) #Padx And PadY for gaps, anchor & justify for position
+customtkinter.CTkLabel(master=frame, text="Sign in to your account", text_color="#7E7E7E", anchor="w", justify="left", font=("Arial Bold", 12)).pack(anchor="w", padx=(25, 0))#Padx And PadY for gaps, anchor & justify for position
 
+#Username Design Section
+#Text
 customtkinter.CTkLabel(master=frame, text="Username:", text_color="#601E88", anchor="w", justify="left", font=("Arial Bold", 14), image=email_icon, compound="left").pack(anchor="w", pady=(38, 0), padx=(25, 0))
-customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", textvariable=temp_user).pack(anchor="w", padx=(25, 0))
+#Entry Box 
+customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", textvariable=temp_user).pack(anchor="w", padx=(25, 0)) #textvariable for storage
 
 
-
+#ID Entry Section
+#Text
 customtkinter.CTkLabel(master=frame, text="4 Digit ID [Leave Blank If New]: ", text_color="#601E88", anchor="w", justify="left", font=("Arial Bold", 14), image=password_icon, compound="left").pack(anchor="w", pady=(21, 0), padx=(25, 0))
-customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", textvariable=temp_id).pack(anchor="w", padx=(25, 0))
+#EntryBox
+customtkinter.CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000", textvariable=temp_id).pack(anchor="w", padx=(25, 0)) #master= is for variable space identification [Left or Right or Inside etc]
 
-customtkinter.CTkButton(master=frame, text="Login", fg_color="#601E88", hover_color="#E44982", font=("Arial Bold", 12), text_color="#ffffff", width=225, command=main_screen).pack(anchor="w", pady=(40, 0), padx=(25, 0))
+#Login Button
+customtkinter.CTkButton(master=frame, text="Login", fg_color="#601E88", hover_color="#E44982", font=("Arial Bold", 12), text_color="#ffffff", width=225, command=main_screen).pack(anchor="w", pady=(40, 0), padx=(25, 0)) # command= -> Calling Functions of Button.
 
-customtkinter.CTkButton(master=frame, text="Continue With Google", fg_color="#EEEEEE", hover_color="#EEEEEE", font=("Arial Bold", 9), text_color="#601E88", width=225, image=google_icon, command=rick).pack(anchor="w", pady=(20, 0), padx=(25, 0))
+#Login With Google Button
+customtkinter.CTkButton(master=frame, text="Continue With Google", fg_color="#EEEEEE", hover_color="#EEEEEE", font=("Arial Bold", 9), text_color="#601E88", width=225, image=google_icon, command=rick).pack(anchor="w", pady=(20, 0), padx=(25, 0)) #image -> Upload image. 
 
-
-
-
+#Keep Window Running and All Functions Functioning -> Backbone!!!
 app.mainloop()
 
